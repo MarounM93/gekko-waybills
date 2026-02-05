@@ -79,7 +79,9 @@ flowchart TB
     API --> AppInsights
     Functions --> AppInsights
 
-    Note over ServiceBus,SQL: Tenant isolation enforced via tenant_id + per-tenant rate limiting + row-level filters
+    TenantIsolationNote["Tenant isolation enforced via tenant_id + per-tenant rate limiting + row-level filters"]
+    TenantIsolationNote -.-> ServiceBus
+    TenantIsolationNote -.-> SQL
 ```
 
 Tenant isolation: tenant_id on every row + per-tenant rate limiting + queue sessions by tenant_id.
