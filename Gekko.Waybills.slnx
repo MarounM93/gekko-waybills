@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Gekko.Waybills.Api/Gekko.Waybills.Api.csproj" />
+    <Project Path="src/Gekko.Waybills.Application/Gekko.Waybills.Application.csproj" />
+    <Project Path="src/Gekko.Waybills.Domain/Gekko.Waybills.Domain.csproj" />
+    <Project Path="src/Gekko.Waybills.Infrastructure/Gekko.Waybills.Infrastructure.csproj" />
+  </Folder>
+</Solution>

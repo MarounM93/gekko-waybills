@@ -1,0 +1,6 @@
+@Gekko.Waybills.Api_HostAddress = http://localhost:5003
+
+GET {{Gekko.Waybills.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

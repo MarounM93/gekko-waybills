@@ -1,0 +1,25 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.log
+
+# IDEs
+.vs/
+.vscode/
+.idea/
+
+# Node / Frontend
+node_modules/
+dist/
+.vite/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local config
+appsettings.Development.json
+.env
