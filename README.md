@@ -56,6 +56,15 @@ Key indexes:
 
 Relationships: Projects and Suppliers each have many Waybills (many-to-one), reflected in the EF Core model.
 
+### Migrations
+EF Core migrations are included in the Infrastructure layer and represent the authoritative database schema used in production and tests.
+
+```
+dotnet ef database update --project src/Gekko.Waybills.Infrastructure --startup-project src/Gekko.Waybills.Api
+```
+
+The database schema documentation above serves as a textual ERD, with relationships enforced via foreign keys and unique constraints.
+
 ## 5) Business rules and validations
 - `Quantity` must be between **0.5** and **50**.
 - `DeliveryDate` must be **>= WaybillDate**.
