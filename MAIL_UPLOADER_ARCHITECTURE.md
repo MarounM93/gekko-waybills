@@ -108,34 +108,34 @@ Tenant isolation: tenant_id on every row + per-tenant rate limiting + queue sess
 ```mermaid
 flowchart TB
     subgraph Tenant_Management["Tenant Management (C#)"]
-        TenantAPI["Tenant API\n• CRUD tenants\n• Manage mailboxes\n• Configure settings\n• REST endpoints"]
-        AuthService["Azure AD B2C\n• JWT validation\n• MSAL integration\n• Rate limiting via APIM"]
+        TenantAPI["Tenant API<br/>─────────────<br/>• CRUD tenants<br/>• Manage mailboxes<br/>• Configure settings<br/>• REST endpoints"]
+        AuthService["Azure AD B2C<br/>─────────────<br/>• JWT validation<br/>• MSAL integration<br/>• Rate limiting via APIM"]
     end
 
     subgraph Email_Ingestion["Email Ingestion Layer (C# / .NET 8)"]
-        Scheduler["Azure Functions\n• Timer triggers\n• Distribute work\n• Handle backpressure"]
+        Scheduler["Azure Functions<br/>─────────────<br/>• Timer triggers<br/>• Distribute work<br/>• Handle backpressure"]
 
-        WebhookReceiver["Webhook Receiver (C# Minimal API)\n• Receive Graph change notifications\n• Receive Gmail push (Pub/Sub -> HTTPS)\n• Validate provider signature/token\n• Map notification to tenant/mailbox\n• Enqueue mailbox sync job"]
+        WebhookReceiver["Webhook Receiver (C# Minimal API)<br/>─────────────<br/>• Receive Graph change notifications<br/>• Receive Gmail push (Pub/Sub -> HTTPS)<br/>• Validate provider signature/token<br/>• Map notification to tenant/mailbox<br/>• Enqueue mailbox sync job"]
         
-        GmailConnector["Gmail Connector\n• Google.Apis.Gmail\n• OAuth2 via MSAL\n• Delta sync tokens"]
+        GmailConnector["Gmail Connector<br/>─────────────<br/>• Google.Apis.Gmail<br/>• OAuth2 via MSAL<br/>• Delta sync tokens"]
         
-        OutlookConnector["Outlook Connector\n• Microsoft.Graph SDK\n• OAuth2 via MSAL\n• Change notifications"]
+        OutlookConnector["Outlook Connector<br/>─────────────<br/>• Microsoft.Graph SDK<br/>• OAuth2 via MSAL<br/>• Change notifications"]
     end
 
     subgraph Processing["Processing Layer (C# Worker Services)"]
-        EmailQueue["Azure Service Bus\n• Priority queues\n• Dead letter queue\n• Sessions for ordering"]
+        EmailQueue["Azure Service Bus<br/>─────────────<br/>• Priority queues<br/>• Dead letter queue<br/>• Sessions for ordering"]
         
-        EmailProcessor["Email Processor\n• MimeKit parsing\n• Extract metadata\n• Polly retry policies"]
+        EmailProcessor["Email Processor<br/>─────────────<br/>• MimeKit parsing<br/>• Extract metadata<br/>• Polly retry policies"]
         
-        AttachmentProcessor["Attachment Processor\n• Block blob upload\n• Azure Defender scan\n• Compression"]
+        AttachmentProcessor["Attachment Processor<br/>─────────────<br/>• Block blob upload<br/>• Azure Defender scan<br/>• Compression"]
     end
 
     subgraph Persistence["Persistence Layer"]
-        DBService["Entity Framework Core\n• Azure SQL\n• Connection pooling\n• Migrations"]
+        DBService["Entity Framework Core<br/>─────────────<br/>• Azure SQL<br/>• Connection pooling<br/>• Migrations"]
         
-        StorageService["Azure Blob SDK\n• Block blob upload\n• SAS token URLs\n• Lifecycle policies"]
+        StorageService["Azure Blob SDK<br/>─────────────<br/>• Block blob upload<br/>• SAS token URLs<br/>• Lifecycle policies"]
         
-        CacheService["StackExchange.Redis\n• Token caching\n• Distributed cache\n• Rate limit counters"]
+        CacheService["StackExchange.Redis<br/>─────────────<br/>• Token caching<br/>• Distributed cache<br/>• Rate limit counters"]
     end
 
     subgraph Observability["Azure Observability"]
