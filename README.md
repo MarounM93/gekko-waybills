@@ -195,6 +195,18 @@ curl -H "X-Tenant-ID: TENANT001" "http://localhost:5003/api/waybills?page=1&page
 - **RabbitMQ** provides reliable event delivery but adds infrastructure complexity.
 - **SQLite for tests** keeps integration tests fast and isolated.
 
+## 17) What I would improve with more time
+- Replace in-memory cache with Redis for multi-instance correctness.
+- Add an Outbox pattern for transactional RabbitMQ publishing.
+- Implement proper authN/authZ with tenant onboarding (beyond `X-Tenant-ID`).
+- Add rate limiting and stricter request validation at the API layer.
+- Add async import retries, DLQ strategy, and operational visibility.
+- Improve the UI with paging, sorting, inline editing, and richer errors.
+- Expand automated tests for import edge cases, consumers, and caching behavior.
+- Add correlation IDs across API → import jobs → broker consumers.
+- Optimize performance with bulk insert, batching, and streaming import.
+- Formalize environment-specific config and secrets management.
+
 ## 15) Assumptions made during development
 - Tenant header is always provided by clients.
 - SQLite is used only for tests; SQL Server is used in production.

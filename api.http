@@ -1,0 +1,97 @@
+@baseUrl = http://localhost:5003
+@tenantId = TENANT001
+
+###
+# 1) Get waybills list (expect 200)
+GET {{baseUrl}}/api/waybills?page=1&pageSize=50
+X-Tenant-ID: {{tenantId}}
+
+###
+# 2) Get waybills summary (expect 200)
+GET {{baseUrl}}/api/waybills/summary
+X-Tenant-ID: {{tenantId}}
+
+###
+# 3) Sync CSV import (multipart/form-data, expect 200)
+# Replace the file path with a real CSV on your machine.
+POST {{baseUrl}}/api/waybills/import
+X-Tenant-ID: {{tenantId}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="file"; filename="waybills.csv"
+Content-Type: text/csv
+
+< ./path/to/waybills.csv
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+###
+# 4) Async CSV import (expect 202 with { jobId })
+POST {{baseUrl}}/api/waybills/import?async=true
+X-Tenant-ID: {{tenantId}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="file"; filename="waybills.csv"
+Content-Type: text/csv
+
+< ./path/to/waybills.csv
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+###
+# 5) Get import job status (expect 200)
+# Copy the jobId from the async response and paste it below.
+@jobId = 00000000-0000-0000-0000-000000000000
+GET {{baseUrl}}/api/import-jobs/{{jobId}}
+X-Tenant-ID: {{tenantId}}
+
+###
+# 6) Update a waybill (expect 200)
+# Replace {id} and rowVersionBase64 with real values from GET /api/waybills/{id}.
+PUT {{baseUrl}}/api/waybills/00000000-0000-0000-0000-000000000000
+X-Tenant-ID: {{tenantId}}
+Content-Type: application/json
+
+{
+  "deliveryDate": "2026-02-04",
+  "productCode": "P-100",
+  "quantity": 2,
+  "unitPrice": 10,
+  "totalAmount": 20,
+  "status": "PENDING",
+  "rowVersionBase64": "REPLACE_WITH_BASE64"
+}
+
+###
+# 7) Invalid status transition (expect 400)
+# Use a waybill currently in DELIVERED and try to move to PENDING.
+PUT {{baseUrl}}/api/waybills/00000000-0000-0000-0000-000000000000
+X-Tenant-ID: {{tenantId}}
+Content-Type: application/json
+
+{
+  "deliveryDate": "2026-02-04",
+  "productCode": "P-100",
+  "quantity": 2,
+  "unitPrice": 10,
+  "totalAmount": 20,
+  "status": "PENDING",
+  "rowVersionBase64": "REPLACE_WITH_BASE64"
+}
+
+###
+# 8) Stale rowVersion (expect 409)
+# Perform an update once, then repeat this request with the old rowVersionBase64.
+PUT {{baseUrl}}/api/waybills/00000000-0000-0000-0000-000000000000
+X-Tenant-ID: {{tenantId}}
+Content-Type: application/json
+
+{
+  "deliveryDate": "2026-02-04",
+  "productCode": "P-100",
+  "quantity": 2,
+  "unitPrice": 10,
+  "totalAmount": 20,
+  "status": "PENDING",
+  "rowVersionBase64": "REPLACE_WITH_BASE64"
+}
